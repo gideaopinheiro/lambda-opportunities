@@ -1,0 +1,27 @@
+version: "3" 
+services:
+  db:
+    image: postgres:latest
+    container_name: lopportunities-db
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres-data:/var/lib/postgres/data
+      - ./init-db:/docker-entrypoint-initdb.d
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lopportunities-api
+    depends_on:
+      - db
+    ports:
+      - 3333:3333
+    command: ["java", "-jar", "target/loapi-1.0.1-standalone.jar"]
+
+volumes:
+  postgres-data:
