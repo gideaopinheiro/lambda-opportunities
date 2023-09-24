@@ -1,5 +1,5 @@
 (ns lambda_opportunities.core
-  (:require [lambda-opportunities.config.server :as s])
+  (:require [lambda-opportunities.api.server :as s])
   (:gen-class))
 
 (defn -main

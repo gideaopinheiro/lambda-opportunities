@@ -58,11 +58,3 @@
               :salary salary}
    {:return-keys true :builder-fn rs/as-unqualified-lower-maps}))
 
-(def openings (atom {"abc" {:id "abc" :role "Elixir Engineer" :company "Google" :remote true, :link "http://google.com" :location "address, 218" :salary 140000}
-                     "def" {:id "def" :role "Haskell Developer" :company "Amazon" :remote true, :link "http://amazon.com" :location "address, 88" :salary 100000}
-                     "asdf" {:id "asdf" :role "ClojureScript Engineer" :company "X-Team" :remote true, :link "http://xteam.com" :location "address, 2" :salary 85000}}))
-
-(comment
-  (list-opening-by-id "98eb0622-1a1a-4700-a9b7-e9a69694fb0b")
-  (update-opening-by-id! "98eb0622-1a1a-4700-a9b7-e9a69694fb0b" {:salary 250080})
-  (create-opportunities-table!))
