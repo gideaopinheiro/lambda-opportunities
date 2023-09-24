@@ -66,3 +66,5 @@ curl -X DELETE http://localhost:3333/opening/{put-a-valid-id-here}
 - [ ] Add Testing
 
 - [ ] Improve the architecture and code readability
+
+- [ ] Add Logging

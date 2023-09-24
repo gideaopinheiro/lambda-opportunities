@@ -7,7 +7,18 @@
             [reitit.ring.middleware.parameters :as parameters]
             [reitit.ring.coercion :as coercion]
             [muuntaja.core :as m]
+            [malli.core :as malli]
             [lambda-opportunities.infra.database.db :refer [list-openings list-opening-by-id  create-opening! delete-opening-by-id! update-opening-by-id!]]))
+
+(def opening-schema
+  (malli/schema [:map
+                 {:title "Opening"}
+                 [:role string?]
+                 [:company string?]
+                 [:remote boolean?]
+                 [:link string?]
+                 [:location string?]
+                 [:salary number?]]))
 
 (defonce server (atom nil))
 
@@ -24,11 +35,21 @@
 
 (defn create-opening-handler [req]
   (let [payload (:body-params req)
-        id (str (java.util.UUID/randomUUID))
-        data (assoc payload :id id)
-        result (create-opening! data)]
-    {:status 201
-     :body result}))
+        valid-payload (malli/validate opening-schema payload)]
+    (if valid-payload
+      (let [id (str (java.util.UUID/randomUUID))
+            data (assoc payload :id id)
+            result (try
+                     (create-opening! data)
+                     (catch Exception _
+                       nil))]
+        (if (nil? result)
+          {:status 500
+           :body {:status 500 :message "Internal server error"}}
+          {:status 201
+           :body result}))
+      {:status 400
+       :body {:status 400 :message "Invalid data"}})))
 
 (defn update-opening-handler [request]
   (let [payload (:body-params request)
