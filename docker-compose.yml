@@ -21,7 +21,7 @@ services:
       - db
     ports:
       - 3333:3333
-    command: ["java", "-jar", "target/loapi-1.0.1-standalone.jar"]
+    command: ["java", "-jar", "target/loapi-standalone.jar"]
 
 volumes:
   postgres-data:
