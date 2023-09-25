@@ -59,7 +59,7 @@ curl -X DELETE http://localhost:3333/opening/{put-a-valid-id-here}
 
 ## To do
 
-- [ ] Schema validation using Malli
+- [X] Schema validation using Malli
 
 - [ ] Use Swagger for API documentation
 
