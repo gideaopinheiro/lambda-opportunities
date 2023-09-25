@@ -12,13 +12,23 @@
 
 (def opening-schema
   (malli/schema [:map
-                 {:title "Opening"}
-                 [:role string?]
-                 [:company string?]
+                 {:title "Opening" :closed true}
+                 [:role [:string {:min 1}]]
+                 [:company [:string {:min 1}]]
                  [:remote boolean?]
-                 [:link string?]
-                 [:location string?]
-                 [:salary number?]]))
+                 [:link [:string {:min 1}]]
+                 [:location [:string {:min 1}]]
+                 [:salary int?]]))
+
+(def update-opening-schema
+  (malli/schema [:map
+                 {:closed true}
+                 [:role {:optional true} [:string {:min 1}]]
+                 [:company {:optional true} [:string {:min 1}]]
+                 [:remote {:optional true} [:boolean]]
+                 [:link {:optional true} [:string {:min 1}]]
+                 [:location {:optional true} [:string {:min 1}]]
+                 [:salary {:optional true} [:int]]]))
 
 (defonce server (atom nil))
 
@@ -54,9 +64,19 @@
 (defn update-opening-handler [request]
   (let [payload (:body-params request)
         id (get-in request [:path-params :id])
-        updated (update-opening-by-id! id payload)]
-    {:status (if (empty? updated) 404 200)
-     :body (if (empty? updated) {:status 404 :message "Opening not found"} (list-opening-by-id id))}))
+        valid-payload (malli/validate update-opening-schema payload)]
+    (if valid-payload
+      (let [updated (try
+                      (update-opening-by-id! id payload)
+                      (catch Exception _
+                        nil))]
+        (if (nil? updated)
+          {:status 500
+           :body {:status 500 :message "Internal server error"}}
+          {:status 201
+           :body (list-opening-by-id id)}))
+      {:status 400
+       :body {:status 400 :message "Invalid data"}})))
 
 (defn delete-opening-handler [request]
   (let [id (get-in request [:path-params :id])
@@ -99,3 +119,4 @@
 (defn stop-server! []
   (.stop @server)
   (reset! server nil))
+
