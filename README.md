@@ -1,5 +1,6 @@
 # Lambda Opportunities API
-![clj-img](https://github.com/gideaopinheiro/lambda-opportunities/assets/57717984/6a5a86d1-e018-4498-9428-be321dc4e1a2)
+![clj-img](https://github.com/gideaopinheiro/lambda-opportunities/assets/57717984/373807cd-1991-4aa3-b2b7-8b20ab47ddef)
+
 
 This project is a Clojure-written version of the [Gopportunities](https://www.youtube.com/watch?v=wyEYpX5U4Vg) project written in Go.
 The libraries used are: ring, reitit and next.jdbc
